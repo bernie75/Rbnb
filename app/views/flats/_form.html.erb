@@ -1,0 +1,25 @@
+<%= simple_form_for(@flat) do |f| %>
+  <% if @flat.errors.any? %>
+   <div id="error_explanation">
+    <ul>
+      <%@flat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+   </div>
+  <% end %>
+
+  <div class="form-inputs">
+    <%= f.input :title %>
+    <%= f.input :stars %>
+    <%= f.input :address %>
+    <%= f.input :description %>
+    <%= f.input :price %>
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+

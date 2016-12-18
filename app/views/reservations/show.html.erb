@@ -1,0 +1,6 @@
+<h1>Reservation</h1>
+<ul>
+  <li>Status: <%= @reservation.state %></li>
+  <li>Item: <%= @reservation.flat_title %></li>
+  <li>Amount: <%= humanized_money_with_symbol(@reservation.amount) %></li>
+<ul>

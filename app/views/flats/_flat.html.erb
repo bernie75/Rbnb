@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card" style="background-image: url(<%= image_path 'card-paris.jpg'%>);">
+    <div class="card-header">
+    <%= image_tag 'anne.jpg', class: 'card-user avatar' %>
+        <h2><%= flat.title %></h2>
+        <p><%= flat.price %></p>
+    </div>
+      <%= flat.stars.times do %>
+        <i class="fa fa-star"></i>
+      <% end %>
+    <div class="card-body">
+      <p class="address"><%= flat.address %></p>
+      <p><%= flat.description.first(50) %></p>
+      <%= link_to flat.title, flat, class: "card-link" %>
+      <%= link_to 'Show', flat %>
+      <%= link_to 'Edit', edit_flat_path(flat) %>
+      <%= link_to 'Destroy', flat, method: :delete, data: { confirm: 'Are you sure?' } %>
+    </div>
+  </div>
+</div>
+
+
