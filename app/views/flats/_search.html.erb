@@ -1,0 +1,5 @@
+<%= simple_form_for :search, url: flats_path, method: :get, remote: true do |f| %>
+  <%= f.input :address, placeholder: 'Where do you want to travel ?', label: false %>
+  <%= f.input :date, as: :date, label: false%>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

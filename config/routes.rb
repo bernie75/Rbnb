@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :flats
-  resources :reservations, only: [:show, :create]
-
+  resources :reservations, only: [:show, :create] do
+    resources :payments, only: [:new, :create]
+  end
 end

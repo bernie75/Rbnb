@@ -1,0 +1,17 @@
+<h1>Purchase of flat <%= @reservation.flat_title %></h1>
+<%= form_tag reservation_payments_path(@reservation) do %>
+  <article>
+    <label class="amount">
+      <span>Amount: <%= humanized_money_with_symbol(@reservation.amount) %></span>
+    </label>
+  </article>
+
+
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+    data-name="My flat"
+    data-description="flat <%= @reservation.flat_title %>"
+    data-amount="<%= @reservation.amount_cents %>"
+    data-currency="<%= @reservation.amount.currency %>"></script>
+
+<% end %>

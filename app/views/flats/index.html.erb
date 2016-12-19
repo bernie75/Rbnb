@@ -4,11 +4,7 @@
   <div class="row">
     <div class="col-sm-8">
       <div class="form-inline">
-        <%= simple_form_for :search, url: flats_path, method: :get, remote: true do |f| %>
-        <%= f.input :address, placeholder: 'Where do you want to travel ?', label: false %>
-        <%= f.input :date, as: :date, label: false%>
-        <%= f.submit class: 'btn btn-primary' %>
-      <% end %>
+        <%= render 'search' %>
       </div>
     </div>
   </div>

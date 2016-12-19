@@ -18,6 +18,10 @@ class FlatsController < ApplicationController
 
   def show
     @flat_coordinates = { lat: @flat.latitude, lng: @flat.longitude }
+    @hash = Gmaps4rails.build_markers(@flats) do |flat, marker|
+      marker.lat flat.latitude
+      marker.lng flat.longitude
+    end
   end
 
   def create

@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+
 
 <% content_for(:title) do %>
   <%= @flat.title %> is on AIRBNB-CLONE
@@ -7,47 +7,62 @@
   <%= @flat.description %> is one the best flat
 <% end %>
 
+<div class="media">
+  <div class="media-body">
+    <div class="media-section">
+    <h1><%= @flat.title %></h1>
 
-<p>
-  <strong>Title:</strong>
-  <%= @flat.title %>
-</p>
+    </div>
 
-<p>
-  <strong>Address:</strong>
-  <%= @flat.address %>
-</p>
+    <div class="media-section">
+      <h2>Description</h2>
+      <p><%= @flat.description %></p>
+    </div>
+  </div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @flat.description %>
-</p>
+  <div class="media-aside">
+    <div class="media-section">
+      <h4><%= @flat.address %></h4>
+      <div id="map" style="width: 100%; height: 200px"></div>
 
-<p>
-  <strong>Stars:</strong>
-  <%= @flat.stars %>
-</p>
+      <% content_for(:after_js) do %>
+        <%= javascript_tag do %>
+          $(document).ready(function() {
+            var handler = Gmaps.build('Google');
+            handler.buildMap({ internal: { id: 'map' } }, function() {
+              markers = handler.addMarkers(<%= raw @hash.to_json %>);
+              handler.bounds.extendWith(markers);
+              handler.fitMapToBounds();
+              if (markers.length == 0) {
+                handler.getMap().setZoom(2);
+              } else if (markers.length == 1) {
+                handler.getMap().setZoom(11);
+              }
+            });
+          });
+        <% end %>
+      <% end %>
+    </div>
 
-<p>
-  <strong>User:</strong>
-  <%= @flat.user_id %>
-</p>
+    <div class="media-section text-center">
+      <h4><%= @flat.price %> € make your day!</h4>
+    </div>
 
-<!-- <p>
-  <strong>Latitude:</strong>
-  <%= @flat.latitude %>
-</p>
+    <div class="media-section text-center">
+      <div class="media-rating">
+      <%= @flat.stars.times do %>
+        <i class="fa fa-star"></i>
+        <% end %>
 
-<p>
-  <strong>Longitude:</strong>
-  <%= @flat.longitude %>
-</p> -->
+        <%= form_tag reservations_path do %>
+        <%= hidden_field_tag 'flat_id', @flat.id %>
+        <%= submit_tag 'Purchase', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
-</ul>
-  <%= form_tag reservations_path do %>
-  <%= hidden_field_tag 'flat_id', @flat.id %>
-  <%= submit_tag 'Purchase', class: 'btn btn-primary' %>
-  <% end %>
 <% content_for(:after_js) do %>
   <%= javascript_tag do %>
     $(document).ready(function() {
@@ -56,6 +71,7 @@
     });
   <% end %>
 <% end %>
+
 
 <%= link_to 'Edit', edit_flat_path(@flat) %> |
 <%= link_to 'Back', flats_path %> |
