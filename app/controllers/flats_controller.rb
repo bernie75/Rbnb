@@ -3,6 +3,13 @@ class FlatsController < ApplicationController
 
   def index
     @flats = Flat.all
+    @flats = Flat.where.not(latitude: nil, longitude: nil)
+
+    @hash = Gmaps4rails.build_markers(@flats) do |flat, marker|
+      marker.lat flat.latitude
+      marker.lng flat.longitude
+      # marker.infowindow render_to_string(partial: "/flats/map_box", locals: { flat: flat })
+    end
   end
 
   def new
@@ -15,18 +22,38 @@ class FlatsController < ApplicationController
 
   def create
     @flat = Flat.new(flat_params)
-    @flat.save
-    # Unless @restaurant.valid?, #save will return false,
-    # and @restaurant is not persisted.
-    # TODO: present the form again with error messages.
-    redirect_to flat_path(@flat)
+    if @flat.save
+        redirect_to @flat
+        else
+        render :new
+      respond_to do |format|
+        if @flat.save
+          format.html { redirect_to @flat, notice: 'Flat was successfully created.' }
+          format.json { render :show, status: :created, location: @flat }
+        else
+          format.html { render :new }
+          format.json { render json: @flat.errors, status: :unprocessable_entity }
+        end
+      end
+    end
   end
+
 
   def update
     if @flat.update(flat_params)
       redirect_to @flat
     else
       render :edit
+    end
+  end
+
+
+
+  def destroy
+    @flat.destroy
+    respond_to do |format|
+      format.html { redirect_to flats_url, notice: 'Flat was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
   private
