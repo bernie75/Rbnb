@@ -20,6 +20,10 @@ gem "geocoder"
 gem "coffee-rails"
 gem "gmaps4rails"
 gem 'money-rails'
+gem 'cloudinary', '1.1.0'
+gem "attachinary", github: "assembler/attachinary"
+gem "jquery-fileupload-rails"
+
 
 source 'https://rails-assets.org' do
   gem "rails-assets-underscore"

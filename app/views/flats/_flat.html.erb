@@ -2,12 +2,10 @@
   <div class="card" style="background-image: url(<%= image_path 'card-paris.jpg'%>);">
     <div class="card-header">
     <%= image_tag 'anne.jpg', class: 'card-user avatar' %>
-        <h2><%= flat.title %></h2>
-        <p>Amount:  <%= flat.price %></p>
+      <h2><%= flat.title %></h2>
+       <p>Amount:  <%= humanized_money_with_symbol(flat.price) %></p>
     </div>
-      <%= flat.stars.times do %>
-        <i class="fa fa-star"></i>
-      <% end %>
+
     <div class="card-body">
       <p class="address"><%= flat.address %></p>
       <p><%= flat.description.first(50) %></p>

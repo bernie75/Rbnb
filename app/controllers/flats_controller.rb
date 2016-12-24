@@ -1,8 +1,9 @@
 class FlatsController < ApplicationController
-  before_action :set_flat, only: [:show, :edit, :update, :destroy, :owner]
+  before_action :set_flat, only: [:show, :edit, :update, :destroy, :show]
+  skip_before_action :authenticate_user!, only: [ :index ]
 
   def index
-    @flats = Flat.all
+    # @flats = Flat.all
     @flats = Flat.where.not(latitude: nil, longitude: nil)
 
     @hash = Gmaps4rails.build_markers(@flats) do |flat, marker|
@@ -12,33 +13,30 @@ class FlatsController < ApplicationController
     end
   end
 
+  def top
+    @top_flats = Flat.where(stars: 3)
+  end
+
   def new
     @flat = Flat.new
   end
 
   def show
+    @review = @flat.reviews.new
     @flat_coordinates = { lat: @flat.latitude, lng: @flat.longitude }
-    @hash = Gmaps4rails.build_markers(@flats) do |flat, marker|
+    @hash = Gmaps4rails.build_markers(@flat) do |flat, marker|
       marker.lat flat.latitude
       marker.lng flat.longitude
     end
   end
 
   def create
-    @flat = Flat.new(flat_params)
+    @flat = current_user.flats.new(flat_params)
     if @flat.save
         redirect_to @flat
         else
         render :new
-      respond_to do |format|
-        if @flat.save
-          format.html { redirect_to @flat, notice: 'Flat was successfully created.' }
-          format.json { render :show, status: :created, location: @flat }
-        else
-          format.html { render :new }
-          format.json { render json: @flat.errors, status: :unprocessable_entity }
-        end
-      end
+
     end
   end
 
@@ -51,7 +49,9 @@ class FlatsController < ApplicationController
     end
   end
 
+  def edit
 
+  end
 
   def destroy
     @flat.destroy
@@ -60,6 +60,7 @@ class FlatsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_flat
@@ -68,6 +69,6 @@ class FlatsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flat_params
-      params.require(:flat).permit(:title, :address, :description, :stars, :user_id, :latitude, :longitude)
+      params.require(:flat).permit(:title, :address, :description, :price, :stars, :latitude, :longitude, photos: [])
     end
 end

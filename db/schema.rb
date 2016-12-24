@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161217235241) do
+ActiveRecord::Schema.define(version: 20161223194013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachinary_files", force: :cascade do |t|
+    t.string   "attachinariable_type"
+    t.integer  "attachinariable_id"
+    t.string   "scope"
+    t.string   "public_id"
+    t.string   "version"
+    t.integer  "width"
+    t.integer  "height"
+    t.string   "format"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
+  end
 
   create_table "flats", force: :cascade do |t|
     t.string   "title"
@@ -26,6 +41,7 @@ ActiveRecord::Schema.define(version: 20161217235241) do
     t.float    "longitude"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "photo"
     t.index ["user_id"], name: "index_flats_on_user_id", using: :btree
   end
 
@@ -41,6 +57,17 @@ ActiveRecord::Schema.define(version: 20161217235241) do
     t.index ["user_id"], name: "index_reservations_on_user_id", using: :btree
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "flat_id"
+    t.integer  "rating"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flat_id"], name: "index_reviews_on_flat_id", using: :btree
+    t.index ["user_id"], name: "index_reviews_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -54,6 +81,12 @@ ActiveRecord::Schema.define(version: 20161217235241) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.json     "session"
+    t.string   "avatar"
+    t.string   "phone_num"
+    t.text     "description"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
@@ -61,4 +94,6 @@ ActiveRecord::Schema.define(version: 20161217235241) do
   add_foreign_key "flats", "users"
   add_foreign_key "reservations", "flats"
   add_foreign_key "reservations", "users"
+  add_foreign_key "reviews", "flats"
+  add_foreign_key "reviews", "users"
 end

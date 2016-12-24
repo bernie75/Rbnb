@@ -1,5 +1,6 @@
 class Reservation < ApplicationRecord
-   belongs_to :user
-   belongs_to :flat
-  monetize :amount_cents
+ belongs_to :user, required: true
+ belongs_to :flat, required: true
+
+ monetize :amount_cents
 end

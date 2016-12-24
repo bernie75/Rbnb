@@ -1,0 +1,7 @@
+<%= simple_form_for([ flat, review], remote: true) do |f| %>
+  <%= f.input :content %>
+  <%= f.input :rating %>
+  <div id="star-rating"></div>
+  <br>
+  <%= f.submit "add a review", class: "btn btn-primary" %>
+<% end %>
